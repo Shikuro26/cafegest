@@ -1,35 +1,29 @@
 # CaféGest
 
-Sistema de gestión de pedidos para una cafetería, desarrollado como proyecto de Ingeniería de Software II.
-
-## Integrante
-
-Andrés Felipe Camacho Ángel — GitHub: @Shikuro26.
+Aplicación de escritorio para gestionar pedidos de una cafetería.
 
 ## Objetivo
 
-Registrar pedidos, personalizar productos con adiciones, aplicar promociones y comunicar los cambios de estado a caja y cocina.
+Registrar pedidos, personalizar productos mediante adiciones, aplicar promociones y comunicar el avance de la preparación a caja y cocina.
 
-## Estado del proyecto
+## Funciones previstas
 
-Etapa de definición de alcance y requisitos. La implementación en Java aún no se ha iniciado.
+- Menú de bebidas y alimentos con precios y disponibilidad.
+- Pedidos con productos, cantidades y adiciones compatibles.
+- Cálculo de subtotal, descuento y total.
+- Promociones según día u horario.
+- Estados recibido, en preparación y entregado.
+- Actualización de las vistas de caja y cocina.
 
-## Documentación
+## Tecnología y arquitectura
 
-- [Alcance del sistema](docs/alcance.md)
-- [Requisitos funcionales y no funcionales](docs/requisitos.md)
+Java, con consola e interfaz gráfica sencilla sobre un mismo núcleo de negocio. Datos en memoria durante una ejecución local.
 
-## Tecnología prevista
+## Estado de desarrollo
 
-Java, con consola e interfaz gráfica sencilla sobre el mismo núcleo de negocio. La versión del JDK y las instrucciones de ejecución se documentarán al configurar el proyecto.
+En definición técnica. Todavía no hay una versión ejecutable. La versión del JDK y las instrucciones de compilación y ejecución se añadirán con la implementación.
 
-## Próximos pasos
+## Documentación técnica
 
-1. Registrar y revisar la propuesta con la docente.
-2. Identificar problemas de diseño y justificar los patrones.
-3. Diseñar la arquitectura y los diagramas UML.
-4. Implementar, probar y documentar el sistema.
-
-## Uso de herramientas
-
-Se utilizó ChatGPT como apoyo para organizar el alcance, redactar requisitos y preparar la documentación inicial del repositorio. El integrante debe revisar y comprender cada cambio y poder explicarlo en la sustentación.
+- [Alcance](docs/alcance.md)
+- [Requisitos](docs/requisitos.md)
