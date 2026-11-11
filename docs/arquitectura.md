@@ -1,6 +1,6 @@
 # Arquitectura y modelo inicial de CaféGest
 
-Diseño propuesto, todavía sin implementación Java. Este modelo desarrolla las decisiones de [diseño](diseno.md) y los [requisitos](requisitos.md). Los diagramas deberán actualizarse cuando las clases se implementen; no representan código que ya exista.
+Modelo objetivo del sistema. Ya existen el punto de entrada `AplicacionCafeGest`, la consola inicial `MenuConsola` y sus pruebas; los servicios, entidades, patrones e interfaz gráfica descritos aquí todavía no están implementados. Este modelo desarrolla las decisiones de [diseño](diseno.md) y los [requisitos](requisitos.md). Los diagramas deberán actualizarse a medida que se implementen las clases.
 
 ## Separación de responsabilidades
 
@@ -40,7 +40,7 @@ Las flechas continuas de las interfaces hacia los servicios representan llamadas
 | `interfaz.grafica` | `VentanaPrincipal`, `VistaCaja`, `VistaCocina`: entrada y presentación gráfica. |
 | `configuracion` | `AplicacionCafeGest`: construcción e inyección de servicios, reloj, repositorio, estrategias y observadores. |
 
-No habrá dependencias del dominio hacia `interfaz` o `infraestructura`. `RepositorioPedidosMemoria` implementará el puerto y no contendrá reglas sobre descuentos o estados. No se fija todavía una biblioteca gráfica ni una versión de JDK.
+No habrá dependencias del dominio hacia `interfaz` o `infraestructura`. `RepositorioPedidosMemoria` implementará el puerto y no contendrá reglas sobre descuentos o estados. Se usa Java 21; la biblioteca gráfica todavía no está elegida.
 
 ## Responsabilidades y reglas del modelo
 
@@ -220,4 +220,4 @@ classDiagram
 
 Las mutaciones pasarán por `ServicioPedidos` y las reglas protegidas por `Pedido`. Una clase gráfica no calculará descuentos ni forzará estados. El código deberá mantener el catálogo y las configuraciones confirmadas consistentes. Los detalles de visibilidad, constructores y transferencias de datos se concretarán al implementar; este primer diagrama no reemplaza los diagramas por patrón ni el diagrama de secuencia final.
 
-La validación de este avance consiste en la coherencia con el alcance, los requisitos y los patrones propuestos. Todavía no se han ejecutado pruebas de una aplicación Java.
+Las pruebas actuales cubren únicamente el ciclo de vida de la consola inicial. Las reglas y relaciones del modelo objetivo deberán comprobarse al implementar los servicios y el dominio.
