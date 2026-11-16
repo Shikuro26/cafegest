@@ -67,6 +67,8 @@ java -jar target/cafegest-0.1.0-SNAPSHOT.jar gui
 
 La ventana permite crear pedidos, agregar productos con adiciones, cambiar la cantidad o quitar una línea, confirmar y avanzar el estado. Las acciones que no se pueden usar en ese momento aparecen apagadas; al pasar el cursor sobre ellas se indica el motivo. El botón «Ver menú» muestra todos los productos, incluidos los agotados. El tablero inferior muestra los pedidos por estado y se actualiza con cada cambio.
 
+«Agregar producto» abre un menú de tarjetas: se toca un producto para sumarlo, se eligen sus adiciones desde la misma tarjeta y se acepta al final. Para usar fotos propias de los productos, coloque un archivo PNG por producto en `src/main/resources/imagenes/productos/` con el código del producto como nombre (por ejemplo `CAF-AME.png`). Si no existe el archivo, se muestra un dibujo sencillo.
+
 Se usa UTF-8 para entrada, salida y archivos fuente; configure la terminal con esa codificación si los acentos no se muestran correctamente.
 
 ## Estructura
