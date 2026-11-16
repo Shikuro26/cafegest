@@ -89,6 +89,19 @@ public final class Pedido {
         this.resumen = nuevoResumen;
     }
 
+    /** Avanza al estado siguiente. Iniciar la preparación exige que el pedido esté confirmado. */
+    public void cambiarEstado(EstadoPedido destino) {
+        Objects.requireNonNull(destino, "El estado destino es obligatorio.");
+        if (!estado.puedePasarA(destino)) {
+            throw new ReglaNegocioException(
+                    "No se permite pasar el pedido " + id + " de " + estado + " a " + destino + ".");
+        }
+        if (destino == EstadoPedido.EN_PREPARACION && !confirmado()) {
+            throw new ReglaNegocioException("El pedido " + id + " debe confirmarse antes de prepararse.");
+        }
+        this.estado = destino;
+    }
+
     private void exigirEditable() {
         if (estado != EstadoPedido.RECIBIDO) {
             throw new ReglaNegocioException("Solo se pueden modificar pedidos en estado recibido.");

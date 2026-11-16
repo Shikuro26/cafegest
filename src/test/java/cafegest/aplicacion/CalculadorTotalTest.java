@@ -87,7 +87,8 @@ class CalculadorTotalTest {
         var servicio = new ServicioPedidos(
                 new ConfiguradorProducto(new cafegest.dominio.catalogo.CatalogoMenu(List.of())),
                 new cafegest.infraestructura.memoria.RepositorioPedidosMemoria(),
-                new CalculadorTotal(List.of(), MARTES_TARDE));
+                new CalculadorTotal(List.of(), MARTES_TARDE),
+                new cafegest.aplicacion.evento.PublicadorEventosPedido(e -> { }));
         String id = servicio.crearPedido();
 
         assertThrows(ReglaNegocioException.class, () -> servicio.confirmarPedido(id));

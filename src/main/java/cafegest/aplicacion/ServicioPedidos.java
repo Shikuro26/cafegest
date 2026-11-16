@@ -1,7 +1,10 @@
 package cafegest.aplicacion;
 
+import cafegest.aplicacion.evento.PedidoCambioEstado;
+import cafegest.aplicacion.evento.PublicadorEventosPedido;
 import cafegest.aplicacion.puerto.RepositorioPedidos;
 import cafegest.dominio.ReglaNegocioException;
+import cafegest.dominio.pedido.EstadoPedido;
 import cafegest.dominio.pedido.Pedido;
 import cafegest.dominio.pedido.ResumenCobro;
 import cafegest.dominio.producto.Adicion;
@@ -13,13 +16,24 @@ public final class ServicioPedidos {
     private final ConfiguradorProducto configurador;
     private final RepositorioPedidos repositorio;
     private final CalculadorTotal calculador;
+    private final PublicadorEventosPedido publicador;
     private int secuencia;
 
     public ServicioPedidos(ConfiguradorProducto configurador, RepositorioPedidos repositorio,
-            CalculadorTotal calculador) {
+            CalculadorTotal calculador, PublicadorEventosPedido publicador) {
         this.configurador = configurador;
         this.repositorio = repositorio;
         this.calculador = calculador;
+        this.publicador = publicador;
+    }
+
+    /** Avanza el estado y, solo si la transición es válida, notifica a caja y cocina. */
+    public void cambiarEstado(String idPedido, EstadoPedido destino) {
+        Pedido pedido = obtener(idPedido);
+        EstadoPedido anterior = pedido.estado();
+        pedido.cambiarEstado(destino);
+        repositorio.guardar(pedido);
+        publicador.publicar(new PedidoCambioEstado(idPedido, anterior, destino));
     }
 
     /** Confirma el pedido, fija subtotal, descuento y total, y devuelve el resumen. */

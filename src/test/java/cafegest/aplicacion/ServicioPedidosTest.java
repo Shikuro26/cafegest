@@ -23,7 +23,8 @@ class ServicioPedidosTest {
     private final ServicioPedidos servicio = new ServicioPedidos(
             new ConfiguradorProducto(catalogo),
             new RepositorioPedidosMemoria(),
-            new CalculadorTotal(List.of(), Clock.systemDefaultZone()));
+            new CalculadorTotal(List.of(), Clock.systemDefaultZone()),
+            new cafegest.aplicacion.evento.PublicadorEventosPedido(e -> { }));
 
     @Test
     void asignaIdentificadoresUnicosEnLaSesion() {
