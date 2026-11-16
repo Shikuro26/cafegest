@@ -92,3 +92,4 @@ docs/
 - [Requisitos](docs/requisitos.md)
 - [Decisiones de diseño](docs/diseno.md)
 - [Arquitectura y modelo](docs/arquitectura.md)
+- [Diagramas de clases por patrón y de secuencia](docs/diagramas.md)

@@ -57,11 +57,35 @@ Las únicas transiciones admitidas serán recibido a en preparación y en prepar
 - No se añadirá un patrón solo por su nombre. Si el código demuestra que una solución más sencilla satisface el problema, se documentará el cambio de decisión.
 - El menú, las compatibilidades y las promociones seguirán siendo configuración interna. Los pedidos permanecerán en memoria durante una sesión.
 
-## Comprobaciones previstas
+## Roles de los patrones en el código
 
-1. Producto base y combinación de dos adiciones: precio, descripción y cantidad correctos; rechazo de adiciones incompatibles antes de construir la configuración.
-2. Promoción vigente y fuera de horario, varias promociones sin acumulación, empate, redondeo y límites del descuento; valores conservados después de confirmar.
-3. Transición válida: caja y cocina reciben un aviso cada una. Transición inválida: estado intacto y ningún aviso. Un receptor fallido no bloquea al otro.
-4. La consola y la interfaz gráfica obtienen los mismos resultados al usar los mismos servicios de negocio.
+| Patrón | Rol | Clase en CaféGest |
+| --- | --- | --- |
+| Decorator | Componente | `ProductoPedido` |
+| Decorator | Componente concreto | `ProductoBase` |
+| Decorator | Decorador base | `AdicionDecorator` |
+| Decorator | Decoradores concretos | `ShotExtra`, `LecheVegetal` |
+| Strategy | Estrategia | `Promocion` |
+| Strategy | Estrategias concretas | `PromocionPorDia`, `PromocionPorHorario` |
+| Strategy | Contexto | `CalculadorTotal` |
+| Observer | Sujeto | `PublicadorEventosPedido` |
+| Observer | Observador | `ObservadorPedido` |
+| Observer | Observadores concretos | `VistaCaja`, `VistaCocina` |
 
-Estas comprobaciones son criterios para la implementación posterior; no constituyen resultados de pruebas ejecutadas.
+Los diagramas de clases por patrón y los de secuencia están en [diagramas](diagramas.md).
+
+## Comprobaciones
+
+Cada comprobación corresponde a pruebas que se ejecutan con `mvn clean verify`.
+
+1. **Decorator:** precio, descripción y cantidad de una combinación de adiciones, y rechazo de adiciones incompatibles o repetidas antes de construir la configuración. Clases: `ConfiguradorProductoTest`, `PedidoTest`.
+2. **Strategy:** promoción vigente y fuera de horario, selección sin acumulación, empate, redondeo HALF_UP, descuento limitado al subtotal, y valores conservados al confirmar. Clases: `PromocionesTest`, `CalculadorTotalTest`, `PedidoTest`.
+3. **Observer:** cada suscriptor recibe el aviso una vez, un receptor fallido no bloquea a los demás, y una transición inválida no cambia el estado ni emite evento. Clases: `PublicadorEventosPedidoTest`, `ServicioPedidosEstadoTest`.
+4. **Consola y gráfica sobre el mismo núcleo:** la consola se prueba de extremo a extremo en `MenuConsolaFlujoTest`. La ventana gráfica no tiene pruebas automáticas de interacción; sus reglas de habilitación se prueban en `EstadoAccionesTest` y `EdicionLineasTest`.
+
+## Conclusiones
+
+- **Qué aprendimos:** los tres patrones resuelven problemas distintos. Decorator evita una clase por cada combinación de adiciones, Strategy aísla cada regla de descuento, y Observer desacopla el negocio de las vistas. Ninguno se aplicó solo por su nombre.
+- **Qué costó:** Decorator obliga a recorrer la cadena para inspeccionar un producto, y Observer hace menos evidente el flujo de avisos. Ambos requirieron pruebas explícitas para no depender del orden de ejecución.
+- **Qué cambiaríamos:** las reglas de compatibilidad de adiciones quedaron en `ReglasAdiciones`, dentro del paquete del dominio de productos, y no en el de catálogo como se planeó al inicio. Lo dejamos así para evitar una dependencia cíclica entre paquetes. Sí cambiaríamos el menú y las promociones para cargarlos desde un archivo de configuración, en lugar de código, para no tener que recompilar al cambiar precios.
+- **Limitación conocida:** la ventana gráfica se verificó construyéndola y revisando imágenes de sus componentes, pero no tiene pruebas automáticas de interacción.
