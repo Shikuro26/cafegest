@@ -1,0 +1,59 @@
+package cafegest.aplicacion;
+
+import cafegest.aplicacion.puerto.RepositorioPedidos;
+import cafegest.dominio.ReglaNegocioException;
+import cafegest.dominio.pedido.Pedido;
+import cafegest.dominio.producto.Adicion;
+import cafegest.dominio.producto.ProductoPedido;
+import java.util.List;
+
+/** Casos de uso de pedidos. Es el único punto por el que consola e interfaz gráfica cambian pedidos. */
+public final class ServicioPedidos {
+    private final ConfiguradorProducto configurador;
+    private final RepositorioPedidos repositorio;
+    private int secuencia;
+
+    public ServicioPedidos(ConfiguradorProducto configurador, RepositorioPedidos repositorio) {
+        this.configurador = configurador;
+        this.repositorio = repositorio;
+    }
+
+    public String crearPedido() {
+        String id = String.format("P-%03d", ++secuencia);
+        repositorio.guardar(new Pedido(id));
+        return id;
+    }
+
+    public int agregarProducto(String idPedido, String productoId, List<Adicion> adiciones, int cantidad) {
+        Pedido pedido = obtener(idPedido);
+        ProductoPedido configurado = configurador.configurar(productoId, adiciones);
+        int numero = pedido.agregarProducto(configurado, cantidad);
+        repositorio.guardar(pedido);
+        return numero;
+    }
+
+    public void modificarCantidad(String idPedido, int numeroLinea, int nuevaCantidad) {
+        Pedido pedido = obtener(idPedido);
+        pedido.modificarCantidad(numeroLinea, nuevaCantidad);
+        repositorio.guardar(pedido);
+    }
+
+    public void retirarProducto(String idPedido, int numeroLinea) {
+        Pedido pedido = obtener(idPedido);
+        pedido.retirarProducto(numeroLinea);
+        repositorio.guardar(pedido);
+    }
+
+    public Pedido consultarPedido(String idPedido) {
+        return obtener(idPedido);
+    }
+
+    public List<Pedido> listarPedidos() {
+        return repositorio.listar();
+    }
+
+    private Pedido obtener(String idPedido) {
+        return repositorio.buscar(idPedido)
+                .orElseThrow(() -> new ReglaNegocioException("No existe un pedido con el identificador " + idPedido + "."));
+    }
+}
