@@ -36,8 +36,9 @@ Las flechas continuas de las interfaces hacia los servicios representan llamadas
 | `aplicacion.puerto` | `RepositorioPedidos`, `ObservadorPedido`: contratos independientes de almacenamiento e interfaz. |
 | `aplicacion.evento` | `PedidoCambioEstado`, `PublicadorEventosPedido`: avisos locales del pedido. |
 | `infraestructura.memoria` | `RepositorioPedidosMemoria`: almacenamiento por identificador durante la sesión. |
-| `interfaz.consola` | `MenuConsola`, `AvisosConsola`: entrada, salida y avisos de texto. |
-| `interfaz.grafica` | `VentanaPrincipal`, `VistaCaja`, `VistaCocina`: entrada y presentación gráfica. |
+| `interfaz.consola` | `MenuConsola`, `VistaCaja`, `VistaCocina`: entrada, salida y avisos de texto. |
+| `interfaz.grafica` | `VentanaPrincipal`, `DialogoAgregarProducto`, `DialogoMenu`, `EstadoAcciones`, `BotonCafe`, `ColumnaEstado`, `TemaCafe`: ventana Swing, tablero por estado y reglas de habilitación de acciones. |
+| `interfaz` | `Dinero`: formato de importes compartido por consola y ventana. |
 | `configuracion` | `AplicacionCafeGest`: construcción e inyección de servicios, reloj, repositorio, estrategias y observadores. |
 
 No habrá dependencias del dominio hacia `interfaz` o `infraestructura`. `RepositorioPedidosMemoria` implementará el puerto y no contendrá reglas sobre descuentos o estados. Se usa Java 21; la biblioteca gráfica todavía no está elegida.

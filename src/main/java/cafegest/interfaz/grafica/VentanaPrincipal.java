@@ -1,6 +1,5 @@
 package cafegest.interfaz.grafica;
 
-import cafegest.interfaz.Dinero;
 import static cafegest.interfaz.grafica.TemaCafe.ACTUAL;
 import static cafegest.interfaz.grafica.TemaCafe.ARENA;
 import static cafegest.interfaz.grafica.TemaCafe.BLANCO;
@@ -27,6 +26,7 @@ import cafegest.dominio.pedido.EstadoPedido;
 import cafegest.dominio.pedido.LineaPedido;
 import cafegest.dominio.pedido.Pedido;
 import cafegest.dominio.pedido.ResumenCobro;
+import cafegest.interfaz.Dinero;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -36,6 +36,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -43,10 +44,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.Box;
 
 /** Ventana de escritorio: pasos del pedido, detalle, acciones y tablero por estado. */
 public final class VentanaPrincipal {
@@ -58,12 +60,17 @@ public final class VentanaPrincipal {
     private final ServicioPedidos servicio;
     private final JFrame ventana = new JFrame("CaféGest");
     private final JComboBox<String> selectorPedido = new JComboBox<>();
+    private final JComboBox<String> selectorLinea = new JComboBox<>();
+    private final JSpinner cantidadNueva = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
     private final JTextArea detalle = new JTextArea();
     private final JLabel[] etiquetasPasos = new JLabel[NOMBRES_PASOS.length];
     private final BotonCafe botonAgregar;
     private final BotonCafe botonConfirmar;
     private final BotonCafe botonPreparar;
     private final BotonCafe botonEntregar;
+    private final BotonCafe botonCambiarCantidad;
+    private final BotonCafe botonQuitarLinea;
+    private final BotonCafe botonVerMenu;
     private final ColumnaEstado columnaRecibidos = new ColumnaEstado("Recibidos", RECIBIDOS, RECIBIDOS_TEXTO);
     private final ColumnaEstado columnaPreparacion = new ColumnaEstado("En preparación", PREPARACION, PREPARACION_TEXTO);
     private final ColumnaEstado columnaEntregados = new ColumnaEstado("Entregados", ENTREGADOS, ENTREGADOS_TEXTO);
@@ -88,6 +95,17 @@ public final class VentanaPrincipal {
                 accion(() -> cambiarEstado(EstadoPedido.EN_PREPARACION)));
         botonEntregar = new BotonCafe("Marcar entregado", e ->
                 accion(() -> cambiarEstado(EstadoPedido.ENTREGADO)));
+        botonCambiarCantidad = new BotonCafe("Cambiar cantidad", e -> accion(() -> {
+            servicio.modificarCantidad(idSeleccionado(), numeroLineaSeleccionada(),
+                    (Integer) cantidadNueva.getValue());
+            refrescar(null);
+        }));
+        botonQuitarLinea = new BotonCafe("Quitar línea", e -> accion(() -> {
+            servicio.retirarProducto(idSeleccionado(), numeroLineaSeleccionada());
+            refrescar(null);
+        }));
+        botonVerMenu = new BotonCafe("Ver menú", e -> new DialogoMenu(ventana, catalogo).setVisible(true));
+        botonVerMenu.configurar(true, null);
 
         construir();
         refrescar(null);
@@ -96,7 +114,7 @@ public final class VentanaPrincipal {
     public void mostrar() {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.pack();
-        ventana.setMinimumSize(new Dimension(960, 600));
+        ventana.setMinimumSize(new Dimension(1000, 640));
         ventana.setLocationRelativeTo(null);
         ventana.setVisible(true);
     }
@@ -179,6 +197,23 @@ public final class VentanaPrincipal {
         acciones.add(botonConfirmar);
         acciones.add(botonPreparar);
         acciones.add(botonEntregar);
+        acciones.add(botonVerMenu);
+
+        selectorLinea.setPreferredSize(new Dimension(280, 30));
+        cantidadNueva.setPreferredSize(new Dimension(72, 30));
+        var edicion = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        edicion.setOpaque(false);
+        edicion.add(new JLabel("Línea"));
+        edicion.add(selectorLinea);
+        edicion.add(new JLabel("Cantidad"));
+        edicion.add(cantidadNueva);
+        edicion.add(botonCambiarCantidad);
+        edicion.add(botonQuitarLinea);
+
+        var controles = new JPanel(new BorderLayout(0, 8));
+        controles.setOpaque(false);
+        controles.add(acciones, BorderLayout.NORTH);
+        controles.add(edicion, BorderLayout.SOUTH);
 
         var tablero = new JPanel(new GridLayout(1, 3, 12, 0));
         tablero.setOpaque(false);
@@ -188,7 +223,7 @@ public final class VentanaPrincipal {
 
         var centro = new JPanel(new BorderLayout(0, 14));
         centro.setOpaque(false);
-        centro.add(acciones, BorderLayout.NORTH);
+        centro.add(controles, BorderLayout.NORTH);
         centro.add(tarjeta, BorderLayout.CENTER);
         centro.add(tablero, BorderLayout.SOUTH);
 
@@ -220,16 +255,36 @@ public final class VentanaPrincipal {
 
         Optional<Pedido> pedido = pedidoSeleccionado();
         mostrarDetalle(pedido);
+        actualizarLineas(pedido);
         actualizarPasos(pedido);
         actualizarBoton(botonAgregar, EstadoAcciones.agregarProducto(pedido));
         actualizarBoton(botonConfirmar, EstadoAcciones.confirmar(pedido));
         actualizarBoton(botonPreparar, EstadoAcciones.pasarAPreparacion(pedido));
         actualizarBoton(botonEntregar, EstadoAcciones.marcarEntregado(pedido));
+        actualizarBoton(botonCambiarCantidad, EstadoAcciones.editarLineas(pedido));
+        actualizarBoton(botonQuitarLinea, EstadoAcciones.editarLineas(pedido));
         actualizarTablero(pedidos);
     }
 
     private void actualizarBoton(BotonCafe boton, EstadoAcciones.Estado estado) {
         boton.configurar(estado.habilitado(), estado.motivo());
+    }
+
+    private void actualizarLineas(Optional<Pedido> pedido) {
+        selectorLinea.removeAllItems();
+        pedido.ifPresent(p -> p.lineas().forEach(linea -> selectorLinea.addItem(
+                linea.numero() + " · " + linea.cantidad() + " × " + linea.producto().descripcion())));
+        if (selectorLinea.getItemCount() > 0) {
+            selectorLinea.setSelectedIndex(0);
+        }
+    }
+
+    private int numeroLineaSeleccionada() {
+        String texto = (String) selectorLinea.getSelectedItem();
+        if (texto == null) {
+            throw new ReglaNegocioException("Seleccione una línea del pedido.");
+        }
+        return Integer.parseInt(texto.substring(0, texto.indexOf(' ')));
     }
 
     private void actualizarPasos(Optional<Pedido> pedido) {
@@ -269,7 +324,8 @@ public final class VentanaPrincipal {
             texto.append("Aún no hay productos. Use «Agregar producto».\n");
         }
         for (LineaPedido linea : pedido.lineas()) {
-            texto.append(linea.cantidad()).append(" × ").append(linea.producto().descripcion())
+            texto.append(linea.numero()).append(".  ").append(linea.cantidad()).append(" × ")
+                    .append(linea.producto().descripcion())
                     .append("   $").append(Dinero.formatear(linea.subtotal())).append('\n');
         }
         texto.append('\n');

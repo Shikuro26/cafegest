@@ -50,6 +50,21 @@ public final class EstadoAcciones {
         return Estado.si();
     }
 
+    /** Cambiar cantidad o quitar una línea: solo en pedidos recibidos sin confirmar y con productos. */
+    public static Estado editarLineas(Optional<Pedido> seleccion) {
+        if (seleccion.isEmpty()) {
+            return Estado.no("Cree o seleccione un pedido");
+        }
+        Pedido pedido = seleccion.get();
+        if (pedido.confirmado()) {
+            return Estado.no("El pedido ya fue confirmado");
+        }
+        if (pedido.lineas().isEmpty()) {
+            return Estado.no("No hay productos para editar");
+        }
+        return Estado.si();
+    }
+
     public static Estado pasarAPreparacion(Optional<Pedido> seleccion) {
         if (seleccion.isEmpty()) {
             return Estado.no("Cree o seleccione un pedido");
