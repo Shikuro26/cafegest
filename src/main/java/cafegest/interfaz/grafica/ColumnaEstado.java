@@ -1,7 +1,6 @@
 package cafegest.interfaz.grafica;
 
 import static cafegest.interfaz.grafica.TemaCafe.BLANCO;
-import static cafegest.interfaz.grafica.TemaCafe.LATTE;
 import static cafegest.interfaz.grafica.TemaCafe.TEXTO_SUAVE;
 
 import java.awt.BorderLayout;
@@ -10,21 +9,19 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/** Columna del tablero con los pedidos de un mismo estado. */
-final class ColumnaEstado extends JPanel {
+/** Columna redondeada del tablero con los pedidos de un mismo estado. */
+final class ColumnaEstado extends TarjetaRedondeada {
     private final JPanel lista = new JPanel();
 
     ColumnaEstado(String titulo, Color fondo, Color textoTitulo) {
-        super(new BorderLayout(0, 8));
-        setBackground(fondo);
-        setOpaque(true);
-        setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+        super(18, fondo);
+        setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
 
         JLabel encabezado = new JLabel(titulo);
         encabezado.setForeground(textoTitulo);
@@ -45,16 +42,15 @@ final class ColumnaEstado extends JPanel {
             lista.add(vacio);
         }
         for (String linea : lineas) {
-            JLabel tarjeta = new JLabel(linea);
-            tarjeta.setOpaque(true);
-            tarjeta.setBackground(BLANCO);
-            tarjeta.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(LATTE, 1, true),
-                    BorderFactory.createEmptyBorder(6, 10, 6, 10)));
+            var tarjeta = new TarjetaRedondeada(14, BLANCO);
+            tarjeta.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+            JLabel texto = new JLabel(linea);
+            texto.setBorder(BorderFactory.createEmptyBorder(7, 12, 7, 12));
+            tarjeta.add(texto, BorderLayout.CENTER);
             tarjeta.setAlignmentX(Component.LEFT_ALIGNMENT);
             tarjeta.setMaximumSize(new Dimension(Integer.MAX_VALUE, tarjeta.getPreferredSize().height));
             lista.add(tarjeta);
-            lista.add(Box.createVerticalStrut(6));
+            lista.add(Box.createVerticalStrut(8));
         }
         lista.revalidate();
         lista.repaint();

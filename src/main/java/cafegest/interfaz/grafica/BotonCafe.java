@@ -7,6 +7,7 @@ import static cafegest.interfaz.grafica.TemaCafe.BOTON_HOVER;
 import static cafegest.interfaz.grafica.TemaCafe.BOTON_PRESIONADO;
 import static cafegest.interfaz.grafica.TemaCafe.BOTON_TEXTO;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -19,8 +20,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 /**
- * Botón plano con estado no disponible. Cuando no está disponible no ejecuta su acción y muestra
- * el motivo al pasar el cursor. Se pinta a mano para no depender del aspecto del sistema.
+ * Botón en forma de píldora con estado no disponible. Cuando no está disponible no ejecuta su acción
+ * y muestra el motivo al pasar el cursor.
  */
 final class BotonCafe extends JButton {
     private boolean disponible = true;
@@ -32,7 +33,7 @@ final class BotonCafe extends JButton {
         setFocusPainted(false);
         setOpaque(false);
         setFont(getFont().deriveFont(Font.PLAIN, 14f));
-        setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+        setBorder(BorderFactory.createEmptyBorder(9, 22, 9, 22));
         addActionListener(evento -> {
             if (disponible) {
                 accion.actionPerformed(evento);
@@ -51,8 +52,8 @@ final class BotonCafe extends JButton {
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        java.awt.Color fondo;
-        java.awt.Color texto;
+        Color fondo;
+        Color texto;
         if (!disponible) {
             fondo = BOTON_APAGADO;
             texto = BOTON_APAGADO_TEXTO;
@@ -66,8 +67,9 @@ final class BotonCafe extends JButton {
             fondo = BOTON;
             texto = BOTON_TEXTO;
         }
+        int arco = getHeight();
         g2.setColor(fondo);
-        g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 12, 12));
+        g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arco, arco));
         g2.setColor(texto);
         g2.setFont(getFont());
         FontMetrics metricas = g2.getFontMetrics();

@@ -27,6 +27,7 @@ import cafegest.dominio.pedido.LineaPedido;
 import cafegest.dominio.pedido.Pedido;
 import cafegest.dominio.pedido.ResumenCobro;
 import cafegest.interfaz.Dinero;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -64,6 +65,7 @@ public final class VentanaPrincipal {
     private final JSpinner cantidadNueva = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
     private final JTextArea detalle = new JTextArea();
     private final JLabel[] etiquetasPasos = new JLabel[NOMBRES_PASOS.length];
+    private final TarjetaRedondeada[] contenedoresPasos = new TarjetaRedondeada[NOMBRES_PASOS.length];
     private final BotonCafe botonAgregar;
     private final BotonCafe botonConfirmar;
     private final BotonCafe botonPreparar;
@@ -119,7 +121,15 @@ public final class VentanaPrincipal {
         ventana.setVisible(true);
     }
 
+    /** Instala FlatLaf y lo tiñe con la paleta café: esquinas redondeadas y colores pastel. */
     private static void aplicarTema() {
+        FlatLightLaf.setup();
+        UIManager.put("Component.arc", 14);
+        UIManager.put("Button.arc", 999);
+        UIManager.put("Component.focusWidth", 1);
+        UIManager.put("Component.accentColor", BOTON);
+        UIManager.put("Component.focusedBorderColor", BOTON);
+        UIManager.put("Component.borderColor", LATTE);
         UIManager.put("Panel.background", CREMA);
         UIManager.put("OptionPane.background", CREMA);
         UIManager.put("OptionPane.messageForeground", TEXTO);
@@ -129,18 +139,22 @@ public final class VentanaPrincipal {
         UIManager.put("CheckBox.disabledText", BOTON_APAGADO_TEXTO);
         UIManager.put("ComboBox.background", BLANCO);
         UIManager.put("ComboBox.foreground", TEXTO);
-        UIManager.put("ComboBox.selectionBackground", BOTON);
-        UIManager.put("ComboBox.selectionForeground", BOTON_TEXTO);
+        UIManager.put("ComboBox.selectionBackground", ACTUAL);
+        UIManager.put("ComboBox.selectionForeground", TEXTO);
         UIManager.put("Spinner.background", BLANCO);
         UIManager.put("TextField.background", BLANCO);
+        UIManager.put("Table.background", BLANCO);
+        UIManager.put("Table.selectionBackground", ACTUAL);
+        UIManager.put("Table.selectionForeground", TEXTO);
+        UIManager.put("TableHeader.background", ARENA);
+        UIManager.put("TableHeader.foreground", TEXTO);
     }
 
     private void construir() {
-        var sidebar = new JPanel();
+        var sidebar = new TarjetaRedondeada(22, ARENA);
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBackground(ARENA);
-        sidebar.setBorder(BorderFactory.createEmptyBorder(18, 16, 18, 16));
-        sidebar.setPreferredSize(new Dimension(230, 0));
+        sidebar.setBorder(BorderFactory.createEmptyBorder(20, 18, 20, 18));
+        sidebar.setPreferredSize(new Dimension(240, 0));
 
         JLabel titulo = new JLabel("CaféGest");
         titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 20f));
@@ -154,7 +168,7 @@ public final class VentanaPrincipal {
         etiquetaSelector.setAlignmentX(Component.LEFT_ALIGNMENT);
         sidebar.add(etiquetaSelector);
         sidebar.add(Box.createVerticalStrut(4));
-        selectorPedido.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
+        selectorPedido.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34));
         selectorPedido.setAlignmentX(Component.LEFT_ALIGNMENT);
         selectorPedido.addActionListener(e -> {
             if (!actualizandoSelector) {
@@ -172,23 +186,24 @@ public final class VentanaPrincipal {
 
         for (int i = 0; i < NOMBRES_PASOS.length; i++) {
             JLabel paso = new JLabel(" ");
-            paso.setOpaque(true);
-            paso.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
-            paso.setAlignmentX(Component.LEFT_ALIGNMENT);
-            paso.setMaximumSize(new Dimension(Integer.MAX_VALUE, paso.getPreferredSize().height));
+            paso.setBorder(BorderFactory.createEmptyBorder(8, 14, 8, 14));
+            var contenedor = new TarjetaRedondeada(16, ARENA);
+            contenedor.add(paso, BorderLayout.CENTER);
+            contenedor.setAlignmentX(Component.LEFT_ALIGNMENT);
+            contenedor.setMaximumSize(new Dimension(Integer.MAX_VALUE, contenedor.getPreferredSize().height));
             etiquetasPasos[i] = paso;
-            sidebar.add(paso);
-            sidebar.add(Box.createVerticalStrut(4));
+            contenedoresPasos[i] = contenedor;
+            sidebar.add(contenedor);
+            sidebar.add(Box.createVerticalStrut(6));
         }
 
         detalle.setEditable(false);
-        detalle.setOpaque(true);
-        detalle.setBackground(BLANCO);
+        detalle.setOpaque(false);
         detalle.setForeground(TEXTO);
         detalle.setFont(detalle.getFont().deriveFont(15f));
-        detalle.setBorder(BorderFactory.createEmptyBorder(14, 16, 14, 16));
-        var tarjeta = new JPanel(new BorderLayout());
-        tarjeta.setBorder(BorderFactory.createLineBorder(LATTE, 1, true));
+        detalle.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
+        var tarjeta = new TarjetaRedondeada(20, BLANCO);
+        tarjeta.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         tarjeta.add(detalle, BorderLayout.CENTER);
 
         var acciones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
@@ -199,8 +214,8 @@ public final class VentanaPrincipal {
         acciones.add(botonEntregar);
         acciones.add(botonVerMenu);
 
-        selectorLinea.setPreferredSize(new Dimension(280, 30));
-        cantidadNueva.setPreferredSize(new Dimension(72, 30));
+        selectorLinea.setPreferredSize(new Dimension(280, 32));
+        cantidadNueva.setPreferredSize(new Dimension(72, 32));
         var edicion = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         edicion.setOpaque(false);
         edicion.add(new JLabel("Línea"));
@@ -210,12 +225,12 @@ public final class VentanaPrincipal {
         edicion.add(botonCambiarCantidad);
         edicion.add(botonQuitarLinea);
 
-        var controles = new JPanel(new BorderLayout(0, 8));
+        var controles = new JPanel(new BorderLayout(0, 10));
         controles.setOpaque(false);
         controles.add(acciones, BorderLayout.NORTH);
         controles.add(edicion, BorderLayout.SOUTH);
 
-        var tablero = new JPanel(new GridLayout(1, 3, 12, 0));
+        var tablero = new JPanel(new GridLayout(1, 3, 14, 0));
         tablero.setOpaque(false);
         tablero.add(columnaRecibidos);
         tablero.add(columnaPreparacion);
@@ -227,9 +242,9 @@ public final class VentanaPrincipal {
         centro.add(tarjeta, BorderLayout.CENTER);
         centro.add(tablero, BorderLayout.SOUTH);
 
-        var raiz = new JPanel(new BorderLayout(16, 0));
+        var raiz = new JPanel(new BorderLayout(18, 0));
         raiz.setBackground(CREMA);
-        raiz.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        raiz.setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
         raiz.add(sidebar, BorderLayout.WEST);
         raiz.add(centro, BorderLayout.CENTER);
         ventana.setContentPane(raiz);
@@ -295,17 +310,17 @@ public final class VentanaPrincipal {
             if (numero < actual) {
                 paso.setText("✓  " + NOMBRES_PASOS[i]);
                 paso.setForeground(TEXTO_SUAVE);
-                paso.setBackground(ARENA);
+                contenedoresPasos[i].cambiarFondo(ARENA);
                 paso.setFont(paso.getFont().deriveFont(Font.PLAIN));
             } else if (numero == actual) {
                 paso.setText("›  " + NOMBRES_PASOS[i]);
                 paso.setForeground(TEXTO);
-                paso.setBackground(ACTUAL);
+                contenedoresPasos[i].cambiarFondo(ACTUAL);
                 paso.setFont(paso.getFont().deriveFont(Font.BOLD));
             } else {
                 paso.setText("   " + NOMBRES_PASOS[i]);
                 paso.setForeground(BOTON_APAGADO_TEXTO);
-                paso.setBackground(ARENA);
+                contenedoresPasos[i].cambiarFondo(ARENA);
                 paso.setFont(paso.getFont().deriveFont(Font.PLAIN));
             }
         }
