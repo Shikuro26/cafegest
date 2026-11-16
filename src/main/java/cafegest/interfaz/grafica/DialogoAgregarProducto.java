@@ -63,6 +63,8 @@ final class DialogoAgregarProducto extends JDialog {
             }
         }
         productos.addActionListener(e -> actualizarAdiciones());
+        EstiloControles.redondear(productos);
+        EstiloControles.redondear(cantidad);
         for (Adicion adicion : Adicion.values()) {
             JCheckBox casilla = new JCheckBox(adicion.nombre() + " (+$" + Dinero.formatear(adicion.precio()) + ")");
             casilla.setBackground(CREMA);

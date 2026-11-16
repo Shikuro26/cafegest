@@ -57,6 +57,11 @@ public final class VentanaPrincipal {
         "Crear pedido", "Agregar productos", "Confirmar", "Preparar", "Entregar"
     };
 
+    static {
+        // Debe correr antes de crear cualquier componente: los campos de instancia se crean antes del constructor.
+        aplicarTema();
+    }
+
     private final CatalogoMenu catalogo;
     private final ServicioPedidos servicio;
     private final JFrame ventana = new JFrame("CaféGest");
@@ -79,7 +84,6 @@ public final class VentanaPrincipal {
     private boolean actualizandoSelector;
 
     public VentanaPrincipal() {
-        aplicarTema();
         this.catalogo = ConfiguracionCafeteria.catalogoPorDefecto();
         var publicador = new PublicadorEventosPedido(error ->
                 SwingUtilities.invokeLater(() -> mostrarAviso(error.getMessage())));
@@ -110,6 +114,9 @@ public final class VentanaPrincipal {
         botonVerMenu.configurar(true, null);
 
         construir();
+        EstiloControles.redondear(selectorPedido);
+        EstiloControles.redondear(selectorLinea);
+        EstiloControles.redondear(cantidadNueva);
         refrescar(null);
     }
 
@@ -129,6 +136,13 @@ public final class VentanaPrincipal {
         UIManager.put("Component.focusWidth", 1);
         UIManager.put("Component.accentColor", BOTON);
         UIManager.put("Component.focusedBorderColor", BOTON);
+        UIManager.put("Component.focusColor", BOTON);
+        UIManager.put("TextComponent.arc", 999);
+        UIManager.put("ComboBox.arc", 999);
+        UIManager.put("Spinner.arc", 999);
+        UIManager.put("TextComponent.borderColor", LATTE);
+        UIManager.put("Spinner.borderColor", LATTE);
+        UIManager.put("ComboBox.borderColor", LATTE);
         UIManager.put("Component.borderColor", LATTE);
         UIManager.put("Panel.background", CREMA);
         UIManager.put("OptionPane.background", CREMA);
