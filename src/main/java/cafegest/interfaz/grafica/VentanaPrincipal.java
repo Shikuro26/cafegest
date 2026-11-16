@@ -68,7 +68,7 @@ public final class VentanaPrincipal {
     private final JComboBox<String> selectorPedido = new JComboBox<>();
     private final JComboBox<String> selectorLinea = new JComboBox<>();
     private final JSpinner cantidadNueva = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
-    private final JTextArea detalle = new JTextArea();
+    private final DetallePedido detalle = new DetallePedido();
     private final JLabel[] etiquetasPasos = new JLabel[NOMBRES_PASOS.length];
     private final TarjetaRedondeada[] contenedoresPasos = new TarjetaRedondeada[NOMBRES_PASOS.length];
     private final BotonCafe botonAgregar;
@@ -211,13 +211,8 @@ public final class VentanaPrincipal {
             sidebar.add(Box.createVerticalStrut(6));
         }
 
-        detalle.setEditable(false);
-        detalle.setOpaque(false);
-        detalle.setForeground(TEXTO);
-        detalle.setFont(detalle.getFont().deriveFont(15f));
-        detalle.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
         var tarjeta = new TarjetaRedondeada(20, BLANCO);
-        tarjeta.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        tarjeta.setBorder(BorderFactory.createEmptyBorder(18, 20, 18, 20));
         tarjeta.add(detalle, BorderLayout.CENTER);
 
         var acciones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
@@ -341,29 +336,7 @@ public final class VentanaPrincipal {
     }
 
     private void mostrarDetalle(Optional<Pedido> seleccion) {
-        if (seleccion.isEmpty()) {
-            detalle.setText("Cree un pedido para comenzar.");
-            return;
-        }
-        Pedido pedido = seleccion.get();
-        var texto = new StringBuilder();
-        texto.append("Pedido ").append(pedido.id()).append("  ·  ").append(etiquetaEstado(pedido.estado())).append('\n');
-        texto.append('\n');
-        if (pedido.lineas().isEmpty()) {
-            texto.append("Aún no hay productos. Use «Agregar producto».\n");
-        }
-        for (LineaPedido linea : pedido.lineas()) {
-            texto.append(linea.numero()).append(".  ").append(linea.cantidad()).append(" × ")
-                    .append(linea.producto().descripcion())
-                    .append("   $").append(Dinero.formatear(linea.subtotal())).append('\n');
-        }
-        texto.append('\n');
-        texto.append("Subtotal   $").append(Dinero.formatear(pedido.subtotal())).append('\n');
-        pedido.resumen().ifPresent(r -> texto
-                .append("Descuento  $").append(Dinero.formatear(r.descuento())).append('\n')
-                .append("Total      $").append(Dinero.formatear(r.total())).append('\n'));
-        detalle.setText(texto.toString());
-        detalle.setCaretPosition(0);
+        detalle.mostrar(seleccion);
     }
 
     private void actualizarTablero(List<Pedido> pedidos) {
