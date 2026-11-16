@@ -1,5 +1,6 @@
 package cafegest.interfaz.grafica;
 
+import cafegest.interfaz.Dinero;
 import static cafegest.interfaz.grafica.TemaCafe.ACTUAL;
 import static cafegest.interfaz.grafica.TemaCafe.ARENA;
 import static cafegest.interfaz.grafica.TemaCafe.BLANCO;
@@ -81,7 +82,7 @@ public final class VentanaPrincipal {
         botonConfirmar = new BotonCafe("Confirmar pedido", e -> accion(() -> {
             ResumenCobro resumen = servicio.confirmarPedido(idSeleccionado());
             refrescar(null);
-            mostrarInfo("Pedido confirmado. Total: $" + resumen.total().toPlainString());
+            mostrarInfo("Pedido confirmado. Total: $" + Dinero.formatear(resumen.total()));
         }));
         botonPreparar = new BotonCafe("Pasar a preparación", e ->
                 accion(() -> cambiarEstado(EstadoPedido.EN_PREPARACION)));
@@ -269,13 +270,13 @@ public final class VentanaPrincipal {
         }
         for (LineaPedido linea : pedido.lineas()) {
             texto.append(linea.cantidad()).append(" × ").append(linea.producto().descripcion())
-                    .append("   $").append(linea.subtotal().toPlainString()).append('\n');
+                    .append("   $").append(Dinero.formatear(linea.subtotal())).append('\n');
         }
         texto.append('\n');
-        texto.append("Subtotal   $").append(pedido.subtotal().toPlainString()).append('\n');
+        texto.append("Subtotal   $").append(Dinero.formatear(pedido.subtotal())).append('\n');
         pedido.resumen().ifPresent(r -> texto
-                .append("Descuento  $").append(r.descuento().toPlainString()).append('\n')
-                .append("Total      $").append(r.total().toPlainString()).append('\n'));
+                .append("Descuento  $").append(Dinero.formatear(r.descuento())).append('\n')
+                .append("Total      $").append(Dinero.formatear(r.total())).append('\n'));
         detalle.setText(texto.toString());
         detalle.setCaretPosition(0);
     }
@@ -290,7 +291,7 @@ public final class VentanaPrincipal {
         var lineas = new ArrayList<String>();
         for (Pedido pedido : pedidos) {
             if (pedido.estado() == estado) {
-                lineas.add(pedido.id() + "   $" + pedido.subtotal().toPlainString());
+                lineas.add(pedido.id() + "   $" + Dinero.formatear(pedido.subtotal()));
             }
         }
         return lineas;

@@ -1,5 +1,6 @@
 package cafegest.interfaz.grafica;
 
+import cafegest.interfaz.Dinero;
 import static cafegest.interfaz.grafica.TemaCafe.BLANCO;
 import static cafegest.interfaz.grafica.TemaCafe.BOTON_APAGADO_TEXTO;
 import static cafegest.interfaz.grafica.TemaCafe.CREMA;
@@ -58,12 +59,12 @@ final class DialogoAgregarProducto extends JDialog {
         for (ProductoMenu producto : catalogo.consultarMenu()) {
             if (producto.disponible()) {
                 productos.addItem(new Opcion(producto.id(),
-                        producto.nombre() + " · $" + producto.precioBase().toPlainString(), producto.categoria()));
+                        producto.nombre() + " · $" + Dinero.formatear(producto.precioBase()), producto.categoria()));
             }
         }
         productos.addActionListener(e -> actualizarAdiciones());
         for (Adicion adicion : Adicion.values()) {
-            JCheckBox casilla = new JCheckBox(adicion.nombre() + " (+$" + adicion.precio().toPlainString() + ")");
+            JCheckBox casilla = new JCheckBox(adicion.nombre() + " (+$" + Dinero.formatear(adicion.precio()) + ")");
             casilla.setBackground(CREMA);
             casillas.put(adicion, casilla);
         }

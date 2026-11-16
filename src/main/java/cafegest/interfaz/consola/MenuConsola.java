@@ -1,5 +1,6 @@
 package cafegest.interfaz.consola;
 
+import cafegest.interfaz.Dinero;
 import cafegest.aplicacion.ServicioPedidos;
 import cafegest.aplicacion.evento.PublicadorEventosPedido;
 import cafegest.configuracion.ConfiguracionCafeteria;
@@ -99,7 +100,7 @@ public final class MenuConsola {
         salida.println("Código    Producto                Categoría  Precio      Disponibilidad");
         for (ProductoMenu producto : catalogo.consultarMenu()) {
             salida.printf("%-9s %-23s %-10s $%-10s %s%n",
-                    producto.id(), producto.nombre(), producto.categoria(), producto.precioBase().toPlainString(),
+                    producto.id(), producto.nombre(), producto.categoria(), Dinero.formatear(producto.precioBase()),
                     producto.disponible() ? "disponible" : "agotado");
         }
     }
@@ -221,7 +222,7 @@ public final class MenuConsola {
     }
 
     private static String dinero(BigDecimal valor) {
-        return "$" + valor.toPlainString();
+        return "$" + Dinero.formatear(valor);
     }
 
     /** Señal interna para terminar el menú cuando se agota la entrada. */

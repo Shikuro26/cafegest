@@ -37,7 +37,7 @@ class MenuConsolaFlujoTest {
                 """);
 
         assertTrue(salida.contains("Pedido P-001 creado en estado RECIBIDO."));
-        assertTrue(salida.contains("Subtotal: $13000.00"));
+        assertTrue(salida.contains("Subtotal: $13000"));
         assertTrue(salida.contains("Pedido P-001 confirmado."));
         assertTrue(salida.contains("[Caja] Pedido P-001: RECIBIDO -> EN_PREPARACION"));
         assertTrue(salida.contains("[Cocina] Preparar pedido P-001"));
