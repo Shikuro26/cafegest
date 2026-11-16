@@ -168,8 +168,11 @@ public final class MenuConsola {
             salida.println("  " + linea.numero() + ". " + linea.cantidad() + " x " + linea.producto().descripcion()
                     + " — " + dinero(linea.subtotal()));
         }
-        salida.println("  Subtotal: " + dinero(pedido.subtotal()));
-        pedido.resumen().ifPresent(this::mostrarResumen);
+        if (pedido.resumen().isPresent()) {
+            mostrarResumen(pedido.resumen().get());
+        } else {
+            salida.println("  Subtotal: " + dinero(pedido.subtotal()));
+        }
     }
 
     private void mostrarResumen(ResumenCobro resumen) {

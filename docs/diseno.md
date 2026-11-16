@@ -1,6 +1,6 @@
 # Decisiones de diseño de CaféGest
 
-Este documento define el diseño previsto para personalización, promociones y actualización de vistas. Las clases y pruebas descritas todavía no están implementadas. Las decisiones se revisarán al desarrollar los flujos reales.
+Este documento describe el diseño de personalización, promociones y actualización de vistas, implementado en el código. Las pruebas unitarias y de flujo verifican las reglas descritas en cada sección.
 
 ## Personalización de productos con Decorator
 

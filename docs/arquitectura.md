@@ -1,6 +1,6 @@
 # Arquitectura y modelo inicial de CaféGest
 
-Modelo objetivo del sistema. Ya existen el punto de entrada `AplicacionCafeGest`, la consola inicial `MenuConsola` y sus pruebas; los servicios, entidades, patrones e interfaz gráfica descritos aquí todavía no están implementados. Este modelo desarrolla las decisiones de [diseño](diseno.md) y los [requisitos](requisitos.md). Los diagramas deberán actualizarse a medida que se implementen las clases.
+Modelo del sistema implementado. Este documento desarrolla las decisiones de [diseño](diseno.md) y los [requisitos](requisitos.md). Los paquetes y clases de la tabla siguiente existen en el código; los diagramas de clases son una vista general y pueden omitir detalles de visibilidad y constructores.
 
 ## Separación de responsabilidades
 
