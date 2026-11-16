@@ -73,26 +73,8 @@ No habrá dependencias del dominio hacia `interfaz` o `infraestructura`. `Reposi
 
 Fuente UML editable. GitHub muestra este bloque como texto; se puede renderizar con PlantUML. Las operaciones internas de sumar importes o guardar datos no se modelan como objetivos separados del actor.
 
-```plantuml
-@startuml
-left to right direction
-actor "Operador de cafetería" as Operador
-rectangle "CaféGest" {
-  usecase "CU-01 Consultar menú" as Menu
-  usecase "CU-02 Crear pedido" as Crear
-  usecase "CU-03 Editar pedido" as Editar
-  usecase "CU-04 Confirmar pedido" as Confirmar
-  usecase "CU-05 Consultar pedidos" as Consultar
-  usecase "CU-06 Cambiar estado" as Estado
-}
-Operador -- Menu
-Operador -- Crear
-Operador -- Editar
-Operador -- Confirmar
-Operador -- Consultar
-Operador -- Estado
-@enduml
-```
+<img width="750" height="583" alt="image" src="https://github.com/user-attachments/assets/2ad1a2a5-ed0b-48a8-a330-97ec46e7744a" />
+
 
 ### Flujo principal de confirmación
 
