@@ -1,6 +1,6 @@
 # Diagramas de CaféGest
 
-Los diagramas siguen el código actual del repositorio. Las clases mostradas existen con esos nombres en los paquetes indicados. Los diagramas de Mermaid se renderizan en GitHub; el de casos de uso está en [arquitectura](arquitectura.md) como PlantUML.
+Los diagramas siguen el código actual del repositorio. Las clases mostradas existen con esos nombres en los paquetes indicados. Los diagramas de Mermaid se renderizan en GitHub. El diagrama de casos de uso está como código PlantUML en [casos-de-uso.puml](casos-de-uso.puml); para verlo, péguelo en [el editor de PlantUML](https://www.plantuml.com/plantuml) o ejecute `java -jar plantuml.jar -tpng docs/casos-de-uso.puml`.
 
 ## Diagrama de clases del patrón Decorator
 

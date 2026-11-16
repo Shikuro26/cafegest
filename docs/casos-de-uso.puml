@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+actor "Operador de cafetería" as Operador
+rectangle "CaféGest" {
+  usecase "CU-01 Consultar menú" as Menu
+  usecase "CU-02 Crear pedido" as Crear
+  usecase "CU-03 Editar pedido" as Editar
+  usecase "CU-04 Confirmar pedido" as Confirmar
+  usecase "CU-05 Consultar pedidos" as Consultar
+  usecase "CU-06 Cambiar estado" as Estado
+}
+Operador -- Menu
+Operador -- Crear
+Operador -- Editar
+Operador -- Confirmar
+Operador -- Consultar
+Operador -- Estado
+@enduml

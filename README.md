@@ -93,3 +93,4 @@ docs/
 - [Decisiones de diseño](docs/diseno.md)
 - [Arquitectura y modelo](docs/arquitectura.md)
 - [Diagramas de clases por patrón y de secuencia](docs/diagramas.md)
+- [Declaración de uso de herramientas de IA](docs/declaracion-de-ia.md)
