@@ -3,6 +3,7 @@ package cafegest.aplicacion;
 import cafegest.aplicacion.puerto.RepositorioPedidos;
 import cafegest.dominio.ReglaNegocioException;
 import cafegest.dominio.pedido.Pedido;
+import cafegest.dominio.pedido.ResumenCobro;
 import cafegest.dominio.producto.Adicion;
 import cafegest.dominio.producto.ProductoPedido;
 import java.util.List;
@@ -11,11 +12,23 @@ import java.util.List;
 public final class ServicioPedidos {
     private final ConfiguradorProducto configurador;
     private final RepositorioPedidos repositorio;
+    private final CalculadorTotal calculador;
     private int secuencia;
 
-    public ServicioPedidos(ConfiguradorProducto configurador, RepositorioPedidos repositorio) {
+    public ServicioPedidos(ConfiguradorProducto configurador, RepositorioPedidos repositorio,
+            CalculadorTotal calculador) {
         this.configurador = configurador;
         this.repositorio = repositorio;
+        this.calculador = calculador;
+    }
+
+    /** Confirma el pedido, fija subtotal, descuento y total, y devuelve el resumen. */
+    public ResumenCobro confirmarPedido(String idPedido) {
+        Pedido pedido = obtener(idPedido);
+        ResumenCobro resumen = calculador.calcular(pedido);
+        pedido.confirmar(resumen);
+        repositorio.guardar(pedido);
+        return resumen;
     }
 
     public String crearPedido() {

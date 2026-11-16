@@ -10,6 +10,7 @@ import cafegest.dominio.catalogo.ProductoMenu;
 import cafegest.dominio.producto.Adicion;
 import cafegest.infraestructura.memoria.RepositorioPedidosMemoria;
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,9 @@ class ServicioPedidosTest {
             new ProductoMenu("te", "Té", Categoria.BEBIDA, new BigDecimal("4000"), false)));
 
     private final ServicioPedidos servicio = new ServicioPedidos(
-            new ConfiguradorProducto(catalogo), new RepositorioPedidosMemoria());
+            new ConfiguradorProducto(catalogo),
+            new RepositorioPedidosMemoria(),
+            new CalculadorTotal(List.of(), Clock.systemDefaultZone()));
 
     @Test
     void asignaIdentificadoresUnicosEnLaSesion() {
