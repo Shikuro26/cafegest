@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600" width="760" height="600" role="img" font-family="Segoe UI, Arial, sans-serif">
-  <title>Diagrama de casos de uso de CaféGest</title>
-  <desc>Un operador de cafetería se relaciona con seis casos de uso: consultar menú, crear pedido, editar pedido, confirmar pedido, consultar pedidos y cambiar estado.</desc>
+  <title>Diagrama de casos de uso de CafÃ©Gest</title>
+  <desc>Un operador de cafeterÃ­a se relaciona con seis casos de uso: consultar menÃº, crear pedido, editar pedido, confirmar pedido, consultar pedidos y cambiar estado.</desc>
   <rect width="760" height="600" fill="#FBF6EF"/>
   <rect x="260" y="40" width="460" height="530" fill="none" stroke="#8A6A52" stroke-width="1.5" rx="4"/>
-  <text x="490" y="64" text-anchor="middle" font-size="16" font-weight="bold" fill="#4A3A2E">CaféGest</text>
+  <text x="490" y="64" text-anchor="middle" font-size="16" font-weight="bold" fill="#4A3A2E">CafÃ©Gest</text>
   <g stroke="#4A3A2E" stroke-width="2" fill="none">
     <circle cx="80" cy="170" r="14"/>
     <line x1="80" y1="184" x2="80" y2="230"/>
@@ -12,14 +12,14 @@
     <line x1="80" y1="230" x2="106" y2="280"/>
   </g>
   <text x="80" y="310" text-anchor="middle" font-size="14" fill="#4A3A2E">Operador de</text>
-  <text x="80" y="328" text-anchor="middle" font-size="14" fill="#4A3A2E">cafetería</text>
+  <text x="80" y="328" text-anchor="middle" font-size="14" fill="#4A3A2E">cafeterÃ­a</text>
   <g stroke="#8A6A52" stroke-width="1.5">
-    <line x1="120" y1="200" x2="330" y2="116"/>
-    <line x1="120" y1="200" x2="330" y2="196"/>
-    <line x1="120" y1="200" x2="330" y2="276"/>
-    <line x1="120" y1="200" x2="330" y2="356"/>
-    <line x1="120" y1="200" x2="330" y2="436"/>
-    <line x1="120" y1="200" x2="330" y2="516"/>
+    <line x1="120" y1="200" x2="344" y2="116"/>
+    <line x1="120" y1="200" x2="344" y2="196"/>
+    <line x1="120" y1="200" x2="344" y2="276"/>
+    <line x1="120" y1="200" x2="344" y2="356"/>
+    <line x1="120" y1="200" x2="344" y2="436"/>
+    <line x1="120" y1="200" x2="344" y2="516"/>
   </g>
   <g fill="#FFFFFF" stroke="#C9A88A" stroke-width="1.5">
     <ellipse cx="490" cy="116" rx="145" ry="28"/>
@@ -35,6 +35,6 @@
     <text x="490" y="281">CU-04 Confirmar pedido</text>
     <text x="490" y="361">CU-03 Editar pedido</text>
     <text x="490" y="441">CU-02 Crear pedido</text>
-    <text x="490" y="521">CU-01 Consultar menú</text>
+    <text x="490" y="521">CU-01 Consultar menÃº</text>
   </g>
 </svg>

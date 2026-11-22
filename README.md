@@ -2,6 +2,18 @@
 
 Aplicación de escritorio para gestionar pedidos de una cafetería.
 
+Proyecto del Parcial 3 de Ingeniería de Software II (Universidad Libre). Propuesta 3: cafetería o restaurante.
+
+## Patrones de diseño aplicados
+
+| Patrón | Categoría | Dónde | Problema que resuelve |
+| --- | --- | --- | --- |
+| Decorator | Estructural | `dominio.producto` | Adiciones sobre un producto sin una clase por combinación. |
+| Strategy | De comportamiento | `dominio.promocion` | Promociones intercambiables sin `if` crecientes en el cálculo. |
+| Observer | De comportamiento | `aplicacion.evento` | Avisar a caja y cocina sin acoplar el negocio a las vistas. |
+
+La justificación, los roles y las alternativas descartadas están en [decisiones de diseño](docs/diseno.md).
+
 ## Objetivo
 
 Registrar pedidos, personalizar productos mediante adiciones, aplicar promociones y comunicar el avance de la preparación a caja y cocina.
@@ -22,19 +34,20 @@ Los datos se mantienen en memoria durante una ejecución local. El menú, las ad
 
 ## Tecnología
 
-Java 21 y Maven 3.9.9 o superior. La consola y la interfaz gráfica (Swing) usan los mismos servicios de negocio.
+Java 21 y Maven 3.9.9 o superior. La consola y la interfaz gráfica (Swing con tema FlatLaf) usan los mismos servicios de negocio.
 
 ## Compilar y probar
 
-Requisitos: JDK 21 o superior y Maven 3.9.9 o superior disponibles en la terminal. La primera compilación necesita acceso a Maven Central para descargar dependencias.
+Requisitos: JDK 21 o superior en la terminal. No hace falta instalar Maven: el proyecto incluye el wrapper, que descarga Maven 3.9.9 la primera vez. Esa primera compilación necesita acceso a Maven Central.
 
 ```sh
 java -version
-mvn -version
-mvn clean verify
+./mvnw clean verify        # Windows: mvnw.cmd clean verify
 ```
 
-Las pruebas JUnit cubren el catálogo, las adiciones, las reglas del pedido, los cálculos de promociones y descuentos, las transiciones de estado, los avisos y los flujos de consola. Los reportes se generan en `target/surefire-reports/`.
+Si ya tiene Maven instalado, `mvn clean verify` produce el mismo resultado.
+
+Las 56 pruebas JUnit cubren el catálogo, las adiciones, las reglas del pedido, los cálculos de promociones y descuentos, las transiciones de estado, los avisos, los flujos de consola y las reglas de habilitación de la ventana. Los reportes se generan en `target/surefire-reports/`.
 
 ## Ejecutar
 
@@ -70,6 +83,14 @@ La ventana permite crear pedidos, agregar productos con adiciones, cambiar la ca
 «Agregar producto» abre un menú de tarjetas: se toca un producto para sumarlo, se eligen sus adiciones desde la misma tarjeta y se acepta al final. Para usar fotos propias de los productos, coloque un archivo PNG por producto en `src/main/resources/imagenes/productos/` con el código del producto como nombre (por ejemplo `CAF-AME.png`). Si no existe el archivo, se muestra un dibujo sencillo.
 
 Se usa UTF-8 para entrada, salida y archivos fuente; configure la terminal con esa codificación si los acentos no se muestran correctamente.
+
+## Pruebas
+
+```sh
+./mvnw test        # Windows: mvnw.cmd test
+```
+
+Las 56 pruebas cubren cada patrón, las reglas del pedido y los dos flujos de consola. El reporte queda en `target/surefire-reports/`.
 
 ## Estructura
 

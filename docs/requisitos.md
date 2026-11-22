@@ -14,14 +14,16 @@
 - **RF-10:** Actualizar las vistas locales de caja y cocina después de cada cambio de estado, con identificador y nuevo estado.
 - **RF-11:** Consultar pedidos de la sesión y su detalle: productos, cantidades, adiciones, valores y estado.
 - **RF-12:** Impedir confirmar pedidos vacíos y mostrar cómo corregirlos.
+- **RF-13:** Operar todo el flujo desde la consola y desde la interfaz gráfica, con las mismas reglas y el mismo estado en memoria.
 
 ## No funcionales
 
-- **RNF-01 — Tecnología:** Java; documentar JDK y pasos de compilación y ejecución al configurar el proyecto.
-- **RNF-02 — Arquitectura:** Separar dominio, servicios e interfaces; consola e interfaz gráfica compartirán servicios de negocio.
+- **RNF-01 — Tecnología:** Java 21 y Maven; documentar JDK y pasos de compilación y ejecución, con el wrapper incluido para no exigir Maven instalado.
+- **RNF-02 — Arquitectura:** Separar dominio, servicios e interfaces; consola e interfaz gráfica comparten los mismos servicios de negocio.
 - **RNF-03 — Precisión:** Usar BigDecimal, pesos colombianos, dos decimales y redondeo HALF_UP en descuentos.
 - **RNF-04 — Validación:** Mensajes claros en español y recuperación de entradas inválidas sin cerrar el programa ni perder el pedido.
-- **RNF-05 — Extensibilidad:** Añadir promociones mediante implementaciones adicionales y su registro, sin modificar el servicio central de cálculo.
-- **RNF-06 — Pruebas:** Pruebas unitarias para clases que implementen patrones, cálculos, promociones, adiciones incompatibles y transiciones inválidas.
+- **RNF-05 — Extensibilidad:** Añadir promociones y adiciones mediante implementaciones adicionales y su registro, sin modificar el servicio central de cálculo.
+- **RNF-06 — Pruebas:** Pruebas unitarias para clases que implementen patrones, cálculos, promociones, adiciones incompatibles y transiciones inválidas; 56 pruebas en total.
 - **RNF-07 — Documentación:** Mantener código, historial de cambios y README con funciones implementadas e instrucciones de ejecución de ambas interfaces.
 - **RNF-08 — Almacenamiento:** Datos en memoria durante una ejecución local; sin base de datos ni servicios externos obligatorios.
+- **RNF-09 — Portabilidad:** Compilar y ejecutar en Windows, macOS o Linux con JDK 21 mediante `mvnw` o `mvnw.cmd`.

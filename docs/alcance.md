@@ -17,9 +17,11 @@ Gestionar pedidos de una cafetería en Java mediante consola e interfaz gráfica
 - Actualización de las vistas de caja y cocina después de cada cambio de estado.
 - Consulta de pedidos de la sesión actual.
 
-Los datos se mantendrán en memoria en una sola ejecución local, sin sincronización entre equipos. Menú, adiciones compatibles y promociones se definirán mediante configuración interna, sin pantalla de administración.
+Los datos se mantienen en memoria en una sola ejecución local, sin sincronización entre equipos. Menú, adiciones compatibles y promociones son configuración interna, sin pantalla de administración.
 
 ## Exclusiones y justificación
+
+Se eligió la propuesta 3 (cafetería o restaurante) y se acotó a gestión de pedidos con productos personalizables, promociones y avisos de preparación.
 
 | Exclusión | Justificación |
 | --- | --- |
@@ -28,6 +30,8 @@ Los datos se mantendrán en memoria en una sola ejecución local, sin sincroniza
 | Inventario de ingredientes y proveedores | Corresponden a un módulo diferente. |
 | Web, móvil, cuentas y roles | La primera versión será local y de escritorio. |
 | Base de datos y conservación entre sesiones | Se usará memoria para concentrarse en las reglas y su extensibilidad. |
+| Combos armados paso a paso | Duplican la personalización que ya resuelve Decorator; se priorizaron las adiciones sobre un producto. |
+| Cierre de caja y reporte de ventas | Aportan poco a las áreas con variación y exigen un módulo de consultas aparte. |
 
 ## Áreas con variación frecuente
 
@@ -36,4 +40,4 @@ Los datos se mantendrán en memoria en una sola ejecución local, sin sincroniza
 3. Promociones: reglas por día u horario.
 4. Receptores de avisos: futuras vistas adicionales a caja y cocina.
 
-Estas áreas servirán para identificar problemas de diseño y justificar patrones en la siguiente etapa. Los patrones aún no se han seleccionado ni implementado.
+Estas áreas se usaron para identificar los problemas de diseño y justificar los patrones. La versión entregada implementa tres patrones, uno por cada una de las tres primeras áreas, y deja preparada la cuarta: Decorator para las adiciones, Strategy para las promociones y Observer para los receptores de avisos. El detalle está en [decisiones de diseño](diseno.md).

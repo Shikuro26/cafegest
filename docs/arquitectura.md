@@ -1,10 +1,10 @@
-# Arquitectura y modelo inicial de CaféGest
+# Arquitectura y modelo de CaféGest
 
 Modelo del sistema implementado. Este documento desarrolla las decisiones de [diseño](diseno.md) y los [requisitos](requisitos.md). Los paquetes y clases de la tabla siguiente existen en el código; los diagramas de clases son una vista general y pueden omitir detalles de visibilidad y constructores.
 
 ## Separación de responsabilidades
 
-La consola y la interfaz gráfica usarán las mismas instancias de servicios y el mismo almacenamiento en memoria dentro de una ejecución. Las interfaces recogen entradas y presentan resultados; los servicios validan operaciones y coordinan el dominio. El dominio no conoce ventanas, menús de consola ni componentes gráficos.
+La consola y la interfaz gráfica usan las mismas instancias de servicios y el mismo almacenamiento en memoria dentro de una ejecución. Las interfaces recogen entradas y presentan resultados; los servicios validan operaciones y coordinan el dominio. El dominio no conoce ventanas, menús de consola ni componentes gráficos.
 
 ```mermaid
 flowchart TB
@@ -24,12 +24,12 @@ flowchart TB
 
 Las flechas continuas de las interfaces hacia los servicios representan llamadas. Las flechas del publicador hacia las vistas representan notificaciones mediante el contrato `ObservadorPedido`, no dependencias hacia clases gráficas concretas. Las vistas de caja y cocina pertenecen a la presentación. La consola puede usar observadores que impriman avisos; la interfaz gráfica puede usar otros que actualicen componentes.
 
-## Paquetes previstos
+## Paquetes
 
 | Paquete base `cafegest` | Responsabilidad y clases principales |
 | --- | --- |
-| `dominio.catalogo` | `ProductoMenu`, `CatalogoMenu`, `ReglasAdiciones`: precios, disponibilidad y compatibilidad. |
-| `dominio.producto` | `ProductoPedido`, `ProductoBase`, `AdicionDecorator`, `ShotExtra`, `LecheVegetal`: configuración personalizada de una unidad. |
+| `dominio.catalogo` | `ProductoMenu`, `CatalogoMenu`, `Categoria`: precios, disponibilidad y categorías del menú. |
+| `dominio.producto` | `ProductoPedido`, `ProductoBase`, `AdicionDecorator`, `ShotExtra`, `LecheVegetal`, `ReglasAdiciones`: configuración personalizada de una unidad y compatibilidad de adiciones. |
 | `dominio.pedido` | `Pedido`, `LineaPedido`, `EstadoPedido`, `ResumenCobro`: líneas, cantidades, estado e importes confirmados. |
 | `dominio.promocion` | `Promocion`, `ContextoPromocion`, `PromocionPorDia`, `PromocionPorHorario`: estrategias de descuento. |
 | `aplicacion` | `ServicioPedidos`, `CalculadorTotal`, `ConfiguradorProducto`: casos de uso y coordinación. |
@@ -37,11 +37,11 @@ Las flechas continuas de las interfaces hacia los servicios representan llamadas
 | `aplicacion.evento` | `PedidoCambioEstado`, `PublicadorEventosPedido`: avisos locales del pedido. |
 | `infraestructura.memoria` | `RepositorioPedidosMemoria`: almacenamiento por identificador durante la sesión. |
 | `interfaz.consola` | `MenuConsola`, `VistaCaja`, `VistaCocina`: entrada, salida y avisos de texto. |
-| `interfaz.grafica` | `VentanaPrincipal`, `DialogoAgregarProducto`, `DialogoMenu`, `EstadoAcciones`, `BotonCafe`, `ColumnaEstado`, `TemaCafe`: ventana Swing, tablero por estado y reglas de habilitación de acciones. |
+| `interfaz.grafica` | `VentanaPrincipal`, `DialogoAgregarProducto`, `DialogoMenu`, `DetallePedido`, `EstadoAcciones`, `BotonCafe`, `ChipAdicion`, `ColumnaEstado`, `ImagenProducto`, `TarjetaRedondeada`, `EstiloControles`, `TemaCafe`: ventana Swing, tablero por estado, menú de tarjetas y reglas de habilitación de acciones. |
 | `interfaz` | `Dinero`: formato de importes compartido por consola y ventana. |
-| `configuracion` | `AplicacionCafeGest`: construcción e inyección de servicios, reloj, repositorio, estrategias y observadores. |
+| `configuracion` | `AplicacionCafeGest`, `ConfiguracionCafeteria`: punto de entrada, construcción e inyección de servicios, reloj, repositorio, estrategias y observadores. |
 
-No habrá dependencias del dominio hacia `interfaz` o `infraestructura`. `RepositorioPedidosMemoria` implementará el puerto y no contendrá reglas sobre descuentos o estados. Se usa Java 21; la biblioteca gráfica todavía no está elegida.
+No hay dependencias del dominio hacia `interfaz` o `infraestructura`. `RepositorioPedidosMemoria` implementa el puerto y no contiene reglas sobre descuentos o estados. Se usa Java 21: la ventana gráfica está construida con Swing y el tema FlatLaf.
 
 ## Responsabilidades y reglas del modelo
 
@@ -69,11 +69,11 @@ No habrá dependencias del dominio hacia `interfaz` o `infraestructura`. `Reposi
 | CU-05 Consultar pedidos | Ver lista y detalle de líneas, cantidades, valores y estado. | RF-11 |
 | CU-06 Cambiar estado | Avanzar un pedido confirmado; avisar a caja y cocina tras una transición válida. | RF-09, RF-10 |
 
-### Diagrama de casos de uso en PlantUML
+### Diagrama de casos de uso
 
-Fuente UML editable. GitHub muestra este bloque como texto; se puede renderizar con PlantUML. Las operaciones internas de sumar importes o guardar datos no se modelan como objetivos separados del actor.
+Diagrama incluido en el repositorio como imagen editable: [casos-de-uso.svg](casos-de-uso.svg). La fuente PlantUML equivalente está en [casos-de-uso.puml](casos-de-uso.puml). Las operaciones internas de sumar importes o guardar datos no se modelan como objetivos separados del actor.
 
-<img width="750" height="583" alt="image" src="https://github.com/user-attachments/assets/2ad1a2a5-ed0b-48a8-a330-97ec46e7744a" />
+![Diagrama de casos de uso de CaféGest](casos-de-uso.svg)
 
 
 ### Flujo principal de confirmación
@@ -88,9 +88,9 @@ Fuente UML editable. GitHub muestra este bloque como texto; se puede renderizar 
 
 **Alternativas:** un pedido vacío se rechaza sin cambios; no hay promociones vigentes y el descuento es cero; hay varias y se elige solo el mayor descuento; un pedido ya confirmado se rechaza sin recalcular sus importes. El cambio a preparación se realiza después mediante CU-06.
 
-## Primer diagrama de clases general
+## Diagrama de clases general
 
-El diagrama presenta contratos, relaciones y operaciones clave. Los tipos auxiliares `ContextoPromocion`, `EstadoPedido` y `PedidoCambioEstado` se describen en el texto para mantener legible esta primera vista. Las multiplicidades reflejan una configuración por línea, varias líneas por pedido y varios observadores por publicador.
+El diagrama presenta contratos, relaciones y operaciones clave. Los tipos auxiliares `ContextoPromocion`, `EstadoPedido` y `PedidoCambioEstado` se describen en el texto para mantener legible esta vista. Las multiplicidades reflejan una configuración por línea, varias líneas por pedido y varios observadores por publicador.
 
 ```mermaid
 classDiagram
@@ -191,16 +191,47 @@ classDiagram
     PublicadorEventosPedido "1" --> "0..*" ObservadorPedido : notifica
     ServicioPedidos --> PublicadorEventosPedido
 
+    class Dinero {
+        <<utility>>
+        +formatear(importe)$
+    }
+    class ConfiguracionCafeteria {
+        <<utility>>
+        +catalogoPorDefecto()$
+        +promocionesPorDefecto()$
+        +relojLocal()$
+        +crearServicio(...)$
+    }
+    class AplicacionCafeGest {
+        <<utility>>
+        +main(args)$
+    }
+    class EstadoAcciones {
+        <<utility>>
+        +pasoActual(pedido)$
+        +agregarProducto(pedido)$
+        +confirmar(pedido)$
+        +editarLineas(pedido)$
+        +pasarAPreparacion(pedido)$
+        +marcarEntregado(pedido)$
+    }
+
     class MenuConsola
     class VentanaPrincipal
     MenuConsola --> ServicioPedidos
     VentanaPrincipal --> ServicioPedidos
+    VentanaPrincipal ..> EstadoAcciones : habilita acciones
+    MenuConsola ..> Dinero
+    VentanaPrincipal ..> Dinero
+    AplicacionCafeGest ..> MenuConsola : inicia
+    AplicacionCafeGest ..> VentanaPrincipal : inicia
+    ConfiguracionCafeteria ..> ServicioPedidos : construye
 ```
 
 **Roles de patrones:** `ProductoPedido` es el componente; `ProductoBase`, el componente concreto; `AdicionDecorator`, el decorador base; `ShotExtra` y `LecheVegetal`, decoradores concretos. `Promocion` es la estrategia y `CalculadorTotal` su contexto. `PublicadorEventosPedido` es el sujeto y `ObservadorPedido` el contrato de los observadores.
 
-## Límites y revisión posterior
+## Límites del diseño
 
-Las mutaciones pasarán por `ServicioPedidos` y las reglas protegidas por `Pedido`. Una clase gráfica no calculará descuentos ni forzará estados. El código deberá mantener el catálogo y las configuraciones confirmadas consistentes. Los detalles de visibilidad, constructores y transferencias de datos se concretarán al implementar; este primer diagrama no reemplaza los diagramas por patrón ni el diagrama de secuencia final.
+Las mutaciones pasan por `ServicioPedidos` y las reglas están protegidas por `Pedido`. Una clase gráfica no calcula descuentos ni fuerza estados. `ConfiguracionCafeteria` construye el catálogo, las promociones, el reloj y el servicio; `AplicacionCafeGest` elige consola o ventana. Los diagramas por patrón y los de secuencia están en [diagramas](diagramas.md).
 
-Las pruebas actuales cubren únicamente el ciclo de vida de la consola inicial. Las reglas y relaciones del modelo objetivo deberán comprobarse al implementar los servicios y el dominio.
+Las pruebas cubren el catálogo, las adiciones, las reglas del pedido, promociones, transiciones, avisos, el flujo completo de consola y las reglas de habilitación de la ventana. Se ejecutan con `mvn clean verify`.

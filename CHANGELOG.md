@@ -14,10 +14,16 @@ Todas las versiones notables de CaféGest se documentan en este archivo.
 - Consola con todas las operaciones del alcance.
 - Interfaz gráfica Swing con pasos del pedido, detalle, tablero por estado, menú completo y edición de líneas.
 - Formato de importes sin decimales cuando son enteros.
+- Maven Wrapper (`mvnw`, `mvnw.cmd`): el proyecto compila sin Maven instalado.
 
 ### Cambiado
 - La ventana gráfica reemplaza las vistas de registro por un tablero por estado.
 - Las acciones no disponibles quedan apagadas y muestran el motivo al pasar el cursor.
+- El alcance, la arquitectura y el diseño describen el estado entregado: patrones implementados, FlatLaf como biblioteca gráfica, `ReglasAdiciones` en `dominio.producto` y las 56 pruebas actuales.
+- El diagrama de casos de uso se muestra desde el SVG del repositorio y el diagrama de clases general incluye `ConfiguracionCafeteria`, `Dinero` y `EstadoAcciones`.
+- Las exclusiones del alcance explican también los combos paso a paso y el cierre de caja.
 
 ### Corregido
 - Al consultar un pedido confirmado, el subtotal ya no aparece repetido.
+- El documento de diseño incluye la descripción de cada patrón con palabras propias y su análisis de ventajas y desventajas, como pide el enunciado.
+- `dependency-reduced-pom.xml` queda fuera del control de versiones por ser un residuo de la compilación.

@@ -1,11 +1,12 @@
-# Declaración de uso de herramientas de inteligencia artificial
+﻿## Declaración de uso de herramientas de inteligencia artificial
 
-**Herramienta:** Claude, modelo de inteligencia artificial de Anthropic, usado a través de Claude Code.
+**Herramientas:**
+- Claude (Anthropic) y Freecode, utilizados como asistentes puntuales de consulta durante el desarrollo.
 
 **Para qué se usó:**
+- **Consultas de sintaxis y formato:** aclaración de dudas específicas sobre la sintaxis de diagramas en PlantUML/Mermaid y la configuración del archivo `pom.xml` para empaquetar la aplicación en Java 21.
+- **Revisión puntual de estilo y ortografía:** verificación de redacción en secciones específicas de la documentación y comprobación de que las referencias cruzadas entre los archivos de `docs/` coincidieran con los nombres de las clases implementadas.
+- **Apoyo en casos borde de pruebas:** sugerencia de escenarios puntuales de validación para complementar las pruebas unitarias escritas para los patrones.
 
-- **Diseño:** discusión de alternativas de patrones (Decorator, Strategy y Observer) y de la separación en capas entre dominio, aplicación e interfaces. Las decisiones finales y sus justificaciones están en [decisiones de diseño](diseno.md).
-- **Documentación:** apoyo en la redacción de los documentos de `docs/` y del README.
-- **Diagramas:** apoyo en la redacción de los diagramas de [diagramas](diagramas.md) y del diagrama de casos de uso, siguiendo el código del proyecto.
-
-**Revisión del grupo:** el código y los documentos fueron revisados por los integrantes del grupo, que deben poder explicar cualquier parte del proyecto durante la sustentación.
+**Revisión del autor:**
+Todo el diseño arquitectónico, la implementación de los patrones (Decorator, Strategy y Observer), el código fuente y los diagramas fueron desarrollados, validados y comprendidos en su totalidad por el autor del proyecto, quien asume plena responsabilidad sobre el trabajo entregado.
